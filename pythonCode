@@ -1,0 +1,82 @@
+import random
+
+def display_word(word, guessed_letters):
+    return " ".join([char if char in guessed_letters else "*" for char in word])
+
+def play_hangman(secret_word, randomWordDesc):
+    secret_word = secret_word.lower()
+    guessed_letters = set()
+
+    startingGameMessage = f"Загаданное слово: {display_word(secret_word, guessed_letters)}"
+    victoryMessage = f"Победа! Вы угадали слово: {secret_word}"
+    wrongMessage = 'Неправильно!'
+    correctMessage = "Есть такая буква!"
+    descHint = f'Подсказка на слово: {randomWordDesc}'
+    continueMessage = 'Желаете продолжить ввод букв? + если да: '
+    giveUpMessage = 'Вы решили сдаться в этом раунде.'
+
+    gameStatus = True
+    print(startingGameMessage)
+
+    while '*' in display_word(secret_word, guessed_letters):
+        heartStatusMessage = "Введите букву или слово целиком: "
+        print(descHint)
+        guess = input(heartStatusMessage).lower()
+
+        if guess == secret_word:
+            guessed_letters.update(list(secret_word))
+            break
+
+        if len(guess) == 1 and guess in secret_word:
+            guessed_letters.add(guess)
+            print(correctMessage)
+        else:
+            print(wrongMessage)
+
+        current_state = display_word(secret_word, guessed_letters)
+        print(current_state)
+
+        if "*" not in current_state:
+            break
+
+        continueAsk = input(continueMessage)
+        if continueAsk != '+':
+            gameStatus = False
+            break
+
+    if gameStatus:
+        print(victoryMessage)
+    else:
+        print(giveUpMessage)
+    return gameStatus
+
+gameWords = {
+    'олень':'Лесной житель с рогами',
+    'облако':'Скопление водяного пара в небе',
+    'питон': 'Большая змея, в честь которой назвали язык программирования',
+    'сапог':  'Предмет одежды, который носят на ногах'
+}
+
+allWords = list(gameWords.keys())
+
+while len(allWords) > 0:
+    randomWordIndex = random.randint(0, len(allWords) - 1)
+    secret_word = allWords[randomWordIndex]
+    randomWordDesc = gameWords[secret_word]
+
+    result = play_hangman(secret_word, randomWordDesc)
+
+    allWords.pop(randomWordIndex)
+
+    if not result:
+        print("Выключение игры...")
+        break
+
+    if len(allWords) == 0:
+        print("Все слова в списке закончились! Поздравляем!")
+        break
+
+    next_round = input("Хотите перейти к следующему слову? (+ для да): ")
+    if next_round != "+":
+        print("Вы решили сдаться. Выключаюсь...")
+        break
