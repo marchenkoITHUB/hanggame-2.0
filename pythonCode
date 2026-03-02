@@ -39,10 +39,10 @@ def play_hangman(secret_word, randomWordDesc):
         if "*" not in current_state:
             break
 
-        continueAsk = input(continueMessage)
-        if continueAsk != '+':
-            gameStatus = False
-            break
+        # continueAsk = input(continueMessage)
+        # if continueAsk != '+':
+        #     gameStatus = False
+        #     break
 
     if gameStatus:
         print(victoryMessage)
@@ -68,9 +68,9 @@ while len(allWords) > 0:
 
     allWords.pop(randomWordIndex)
 
-    if not result:
-        print("Выключение игры...")
-        break
+    # if not result:
+    #     print("Выключение игры...")
+    #     break
 
     if len(allWords) == 0:
         print("Все слова в списке закончились! Поздравляем!")
